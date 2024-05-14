@@ -3,23 +3,24 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 
 const NavbarNavigation = () => {
     useEffect(() => {
-        // Handling scroll to add class to Navbar
-        const handleScroll = () => {
-            const navbar = document.querySelector('.navbar-navigation');
-            if (window.scrollY > 200) {
-                navbar.classList.add('scroll-nav');
-            } else {
-                navbar.classList.remove('scroll-nav');
-            }
+        const navbar = document.querySelector('.navbar-navigation');
+        const hamburger = document.getElementById('hamburger');
+
+        const handleNavbarScroll = () => {
+            const AnimationNavbar = document.querySelector('.navbar-show');
+            const onScroll = () => {
+                if (window.scrollY > 150) {
+                    AnimationNavbar.classList.add('animation');
+                } else {
+                    AnimationNavbar.classList.remove('animation');
+                }
+            };
+            window.addEventListener('scroll', onScroll);
+            return () => window.removeEventListener('scroll', onScroll);
         };
 
-        window.addEventListener('scroll', handleScroll);
-
-        // Handling hamburger toggle to show/hide sidebar
         const handleHamburgerChange = () => {
-            const hamburger = document.getElementById('hamburger');
             const sidebar = document.querySelector('.nav-links');
-
             if (hamburger.checked) {
                 sidebar.classList.add('active');
             } else {
@@ -27,32 +28,45 @@ const NavbarNavigation = () => {
             }
         };
 
-        const hamburger = document.getElementById('hamburger');
+        const handleScroll = () => {
+            let lastScrollTop = 0;
+            const onScroll = () => {
+                if (window.scrollY > lastScrollTop) {
+                    navbar.classList.remove("visible");
+                } else if (window.scrollY < lastScrollTop) {
+                    navbar.classList.add("visible");
+                }
+                lastScrollTop = window.scrollY <= 0 ? 0 : window.scrollY;
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            return () => window.removeEventListener('scroll', onScroll);
+        };
+
+        const cleanupNavbarScroll = handleNavbarScroll();
+        const cleanupScroll = handleScroll();
         hamburger.addEventListener('change', handleHamburgerChange);
 
-        // Cleanup event listeners on component unmount
+        // Initial visibility setup
+        navbar.classList.add('visible');
+
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            cleanupNavbarScroll();
+            cleanupScroll();
             hamburger.removeEventListener('change', handleHamburgerChange);
         };
     }, []);
 
     return (
-        <div className='navbar-navigation'>
+        <div className='navbar-navigation navbar-show'>
             <Navbar className='navbar'>
                 <Container>
-                    {/* Title nav */}
                     <Navbar.Brand>
                         <a href='#' className='nav-title text-uppercase fst-italic fw-semibold text-warning text-decoration-none fs-4'>elfilms</a>
                     </Navbar.Brand>
-
-                    {/* Nav links */}
                     <Nav className='nav-links'>
                         <Nav.Link className='nav-item text-light fs-6'>Trending</Nav.Link>
                         <Nav.Link className='nav-item text-light fs-6'>Super Hero</Nav.Link>
                     </Nav>
-
-                    {/* Hamburger */}
                     <label className='hamburger'>
                         <input type='checkbox' id='hamburger' />
                         <svg viewBox='0 0 32 32'>

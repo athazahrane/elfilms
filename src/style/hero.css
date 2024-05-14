@@ -1,13 +1,34 @@
+body {
+    overflow-x: hidden;
+}
+
 .navbar-navigation {
     position: fixed;
     width: 100%;
-    transition: .5s ease;
+    transform: translateY(0);
+    transition: transform 1s ease;
     z-index: 1000;
 }
 
-.navbar-navigation.scroll-nav {
+.navbar-navigation.visible {
+    transform: translateY(0);
+}
+
+.navbar-navigation:not(.visible) {
+    transform: translateY(-120px);
+}
+
+.navbar-show {
+    transition: all .5s ease;
+}
+
+.navbar-show.animation {
     padding: 15px 20px;
     background-color: #000 !important;
+}
+
+.nav-item:hover {
+    color: yellow !important;
 }
 
 .hero {
@@ -83,6 +104,48 @@
     stroke-dashoffset: -32.42;
 }
 
+
+/* trending */
+.trending {
+    width: 100%;
+    height: min-content;
+    padding: 100px 0;
+    background-image: url(../assets/images/spiderman.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.card-item {
+    border-radius: 20px;
+    overflow: hidden;
+    width: max-content;
+}
+
+.score p {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.swiper-content {
+    width: 70%;
+    margin: 0 auto;
+    padding-top: 50px;
+    width: 80%;
+}
+
+.movie-wrapper {
+    margin: 0 30px;
+}
+
+.slick-active button::before {
+    color: yellow !important;
+}
+
+.slick-active button {
+    color: #fff;
+}
 
 /* laptop */
 @media (max-width: 992px) {
